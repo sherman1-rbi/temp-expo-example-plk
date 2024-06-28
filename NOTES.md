@@ -21,3 +21,16 @@
 ```
 
 - Stop and restart the development server - `npm run ios`
+
+## AWS WAF SDK integration
+
+- Added the iOS AWS WAF SDK to `third-party/WafMobileSdk`
+- Created a config plugin in `modules/aws-waf/src/withAwsWaf` to update the `Podfile` during `expo prebuild`
+- Added the config plugin to Expo App configuration in `app.json`
+- Rerun the iOS prebuild - `npx expo prebuild --clean --platform ios`. The generated `ios/Podfile` now contains the `pod 'WafMobileSdk'` snippet.
+```
+  use_expo_modules!
+# @generated begin expo-aws-waf - expo prebuild (DO NOT MODIFY) ...
+  pod 'WafMobileSdk', :path => '/Users/MYUSER/dev/expo-example-plk/third-party/WafMobileSdk'
+# @generated end expo-aws-waf
+```
