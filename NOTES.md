@@ -52,3 +52,5 @@
 
 CommandError: Failed to build iOS project. "xcodebuild" exited with error code 65.
 ```
+- Add `'s.dependency = 'WafMobileSdk'` to `modules/aws-waf/ios/ExpoAwsWaf.podspec`
+- Add initialization code to `modules/aws-waf/ios/ExpoAwsWafMobile.swift`
