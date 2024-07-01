@@ -20,7 +20,8 @@
       "adaptiveIcon": {
         "foregroundImage": "./assets/images/adaptive-icon.png",
         "backgroundColor": "#ffffff"
-      }
+      },
+      "package": "com.anonymous.expoexampleplk"
     },
     "web": {
       "bundler": "metro",
@@ -29,7 +30,9 @@
     },
     "plugins": [
       "expo-router",
-      ["./modules/aws-waf/src/withAwsWaf"]
+      [
+        "./modules/aws-waf/src/withAwsWaf"
+      ]
     ],
     "experiments": {
       "typedRoutes": true

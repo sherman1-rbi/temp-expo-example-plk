@@ -34,3 +34,21 @@
   pod 'WafMobileSdk', :path => '/Users/MYUSER/dev/expo-example-plk/third-party/WafMobileSdk'
 # @generated end expo-aws-waf
 ```
+
+
+```
+❌  (modules/aws-waf/ios/ExpoAwsWafModule.swift:3:8)
+
+  1 | import ExpoModulesCore
+  2 |
+> 3 | import WafMobileSdk
+    |        ^ no such module 'WafMobileSdk'
+  4 |
+  5 | public class ExpoAwsWafModule: Module {
+  6 |   // Each module class must implement the definition function. The definition consists of components
+
+
+› 1 error(s), and 0 warning(s)
+
+CommandError: Failed to build iOS project. "xcodebuild" exited with error code 65.
+```

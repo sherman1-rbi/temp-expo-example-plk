@@ -1,5 +1,11 @@
 import ExpoModulesCore
 
+import WafMobileSdk
+
+let url: URL = URL(string: "Web ACL integration URL")!
+let configuration = WAFConfiguration(applicationIntegrationUrl: url, domainName: "Domain name")
+let tokenProvider = WAFTokenProvider(configuration!)
+
 public class ExpoAwsWafModule: Module {
   // Each module class must implement the definition function. The definition consists of components
   // that describes the module's functionality and behavior.
@@ -20,7 +26,8 @@ public class ExpoAwsWafModule: Module {
 
     // Defines a JavaScript synchronous function that runs the native code on the JavaScript thread.
     Function("hello") {
-      return "Hello world! 👋"
+      // return "Hello, world"
+      return tokenProvider.getToken()
     }
 
     // Defines a JavaScript function that always returns a Promise and whose native code

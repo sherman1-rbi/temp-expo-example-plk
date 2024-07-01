@@ -22,7 +22,7 @@ const withAwsWafIOS = config => withDangerousMod(config, ['ios', config => {
   }
 
   const awsWafSdkBlock = [
-	  `  pod 'WafMobileSdk', :path => '${wafMobileSdkPath}'`,
+	  `  pod 'WafMobileSdk', :path => '../third-party/WafMobileSdk'`,
   ].join('');
 
   const updatedPodfileContents = mergeContents({
