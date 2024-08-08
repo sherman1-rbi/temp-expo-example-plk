@@ -1,13 +1,32 @@
-import { EventEmitter } from 'expo-modules-core';
+let cachedWafToken = '';
 
-const emitter = new EventEmitter({} as any);
+async function persistToken(): Promise<void> {
+  const token = await window.AwsWafIntegration?.getToken();
+  cachedWafToken = token;
+}
 
 export default {
-  PI: Math.PI,
-  async setValueAsync(value: string): Promise<void> {
-    emitter.emit('onChange', { value });
+  getToken: function getToken(): string {
+    if (window.AwsWafIntegration?.hasToken() && cachedWafToken) {
+      return cachedWafToken;
+    }
+
+    //enqueue an async token update
+    persistToken();
+
+    return '';
   },
-  hello() {
-    return 'Hello world! 👋';
+
+  initialize: async function initialize() {
+    await persistToken(); //Enqueues initial token generation
   },
 };
+
+declare global {
+  interface Window {
+    AwsWafIntegration?: {
+      getToken: Function;
+      hasToken: Function;
+    };
+  }
+}

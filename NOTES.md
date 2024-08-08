@@ -21,3 +21,36 @@
 ```
 
 - Stop and restart the development server - `npm run ios`
+
+## AWS WAF SDK integration
+
+- Added the iOS AWS WAF SDK to `third-party/WafMobileSdk`
+- Created a config plugin in `modules/aws-waf/src/withAwsWaf` to update the `Podfile` during `expo prebuild`
+- Added the config plugin to Expo App configuration in `app.json`
+- Rerun the iOS prebuild - `npx expo prebuild --clean --platform ios`. The generated `ios/Podfile` now contains the `pod 'WafMobileSdk'` snippet.
+```
+  use_expo_modules!
+# @generated begin expo-aws-waf - expo prebuild (DO NOT MODIFY) ...
+  pod 'WafMobileSdk', :path => '/Users/MYUSER/dev/expo-example-plk/third-party/WafMobileSdk'
+# @generated end expo-aws-waf
+```
+
+
+```
+❌  (modules/aws-waf/ios/ExpoAwsWafModule.swift:3:8)
+
+  1 | import ExpoModulesCore
+  2 |
+> 3 | import WafMobileSdk
+    |        ^ no such module 'WafMobileSdk'
+  4 |
+  5 | public class ExpoAwsWafModule: Module {
+  6 |   // Each module class must implement the definition function. The definition consists of components
+
+
+› 1 error(s), and 0 warning(s)
+
+CommandError: Failed to build iOS project. "xcodebuild" exited with error code 65.
+```
+- Add `'s.dependency = 'WafMobileSdk'` to `modules/aws-waf/ios/ExpoAwsWaf.podspec`
+- Add initialization code to `modules/aws-waf/ios/ExpoAwsWafMobile.swift`
