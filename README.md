@@ -25,26 +25,17 @@ In the output, you'll find options to open the app in a
 
 You can start developing by editing the files inside the **app** directory. This project uses [file-based routing](https://docs.expo.dev/router/introduction).
 
-## Get a fresh project
+# AWS Support Case 172107774700227 Guidance
 
-When you're ready, run:
+## Build and run iOS example app
 
-```bash
-npm run reset-project
-```
+- Unpack the provided `.zip` containing the SDK to the `modules/aws-waf/config-plugin/sdk` directory
+- `npx expo prebuild --clean --platform ios`
+- Open this `ios` directory in XCode
+- Build and launch from XCode
+- Set the environment variable `AWS_WAF_DOMAIN_NAME=postman-echo.com` and `AWS_WAF_INTEGRATION_URL` to the global/edge WAF integration URL
+- Run `npx expo start` (the `AWS_WAF` environment variables must be visible to this process)
+- Click the "Press Me" Button in the example app
 
-This command will move the starter code to the **app-example** directory and create a blank **app** directory where you can start developing.
+  The "Press Me" button makes an HTTP POST request to `https://postman-echo.com/post` with an `x-aws-waf-token` header.
 
-## Learn more
-
-To learn more about developing your project with Expo, look at the following resources:
-
-- [Expo documentation](https://docs.expo.dev/): Learn fundamentals, or go into advanced topics with our [guides](https://docs.expo.dev/guides).
-- [Learn Expo tutorial](https://docs.expo.dev/tutorial/introduction/): Follow a step-by-step tutorial where you'll create a project that runs on Android, iOS, and the web.
-
-## Join the community
-
-Join our community of developers creating universal apps.
-
-- [Expo on GitHub](https://github.com/expo/expo): View our open source platform and contribute.
-- [Discord community](https://chat.expo.dev): Chat with Expo users and ask questions.
