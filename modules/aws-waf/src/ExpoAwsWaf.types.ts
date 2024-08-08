@@ -1,7 +1,8 @@
-export type ChangeEventPayload = {
+export type OnTokenReadyEventPayload = {
+  /**
+   * New token value.
+   */
   value: string;
 };
 
-export type ExpoAwsWafViewProps = {
-  name: string;
-};
+export const ON_TOKEN_READY_EVENT = 'onTokenReady';

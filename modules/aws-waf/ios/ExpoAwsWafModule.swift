@@ -2,50 +2,50 @@ import ExpoModulesCore
 
 import WafMobileSdk
 
-let url: URL = URL(string: "Web ACL integration URL")!
-let configuration = WAFConfiguration(applicationIntegrationUrl: url, domainName: "Domain name")
-let tokenProvider = WAFTokenProvider(configuration!)
+let onTokenReadyEvent = "onTokenReady"
 
 public class ExpoAwsWafModule: Module {
-  // Each module class must implement the definition function. The definition consists of components
-  // that describes the module's functionality and behavior.
-  // See https://docs.expo.dev/modules/module-api for more details about available components.
+  var tokenProvider: WAFTokenProvider?
+
   public func definition() -> ModuleDefinition {
-    // Sets the name of the module that JavaScript code will use to refer to the module. Takes a string as an argument.
-    // Can be inferred from module's class name, but it's recommended to set it explicitly for clarity.
-    // The module will be accessible from `requireNativeModule('ExpoAwsWaf')` in JavaScript.
     Name("ExpoAwsWaf")
 
-    // Sets constant properties on the module. Can take a dictionary or a closure that returns a dictionary.
-    Constants([
-      "PI": Double.pi
-    ])
+    Events(onTokenReadyEvent)
 
-    // Defines event names that the module can send to JavaScript.
-    Events("onChange")
+    Function("initialize") { (integrationUrl: String, domainName: String) -> Void in
+        print("Initializing WAF SDK: integrationUrl=\(integrationUrl), domainName=\(domainName)")
 
-    // Defines a JavaScript synchronous function that runs the native code on the JavaScript thread.
-    Function("hello") {
-      // return "Hello, world"
-      return tokenProvider.getToken()
+        guard let url: URL = URL(string: integrationUrl) else {
+            print("Error: AWS WAF invalid integration URL")
+            return
+        }
+        guard let config = WAFConfiguration(applicationIntegrationUrl: url, domainName: domainName) else {
+          print("Error: AWS WAF configuration not defined")
+          return
+        }
+
+        let provider = WAFTokenProvider(config)
+        self.tokenProvider = provider
+
+        provider.onTokenReady() { token, error in
+            if let token = token {
+                self.sendEvent(onTokenReadyEvent, [
+                  "value": token
+                ])
+            }
+
+            if let error = error {
+                print("Error: AWS WAF onTokenReady error \(error)")
+            }
+        }
     }
 
-    // Defines a JavaScript function that always returns a Promise and whose native code
-    // is by default dispatched on the different thread than the JavaScript runtime runs on.
-    AsyncFunction("setValueAsync") { (value: String) in
-      // Send an event to JavaScript.
-      self.sendEvent("onChange", [
-        "value": value
-      ])
-    }
-
-    // Enables the module to be used as a native view. Definition components that are accepted as part of the
-    // view definition: Prop, Events.
-    View(ExpoAwsWafView.self) {
-      // Defines a setter for the `name` prop.
-      Prop("name") { (view: ExpoAwsWafView, prop: String) in
-        print(prop)
-      }
+    Function("getToken") {
+        guard let provider = self.tokenProvider else {
+            print("Error: AWS WAF SDK is not initialized.")
+            return ""
+        }
+        return provider.getToken()?.value ?? ""
     }
   }
 }

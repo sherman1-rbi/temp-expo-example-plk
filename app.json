@@ -31,7 +31,7 @@
     "plugins": [
       "expo-router",
       [
-        "./modules/aws-waf/src/withAwsWaf"
+        "./modules/aws-waf/config-plugin"
       ]
     ],
     "experiments": {
